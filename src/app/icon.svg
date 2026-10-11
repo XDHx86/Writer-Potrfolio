@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="65 43 370 410" role="img" aria-label="Muwafaq Sami wolf mark">
+  <defs>
+    <linearGradient id="fur" x2="1" y2="1"><stop stop-color="#484652"/><stop offset=".55" stop-color="#25242e"/><stop offset="1" stop-color="#111219"/></linearGradient>
+    <linearGradient id="face" x2="1" y2="1"><stop stop-color="#77717a"/><stop offset=".55" stop-color="#49434d"/><stop offset="1" stop-color="#2d2b35"/></linearGradient>
+    <linearGradient id="muzzle" x2="0" y2="1"><stop stop-color="#e5d6ca"/><stop offset="1" stop-color="#a99598"/></linearGradient>
+  </defs>
+  <rect x="65" y="43" width="370" height="410" rx="76" fill="#230f1b"/>
+  <path d="M102 235 97 54l75 73 71 82ZM398 235l5-181-75 73-71 82Z" fill="url(#fur)" stroke="#c07080" stroke-width="5"/>
+  <path d="m122 191-8-98 77 108ZM378 191l8-98-77 108Z" fill="#984059"/>
+  <path d="M105 208q10-72 62-93l83 37 83-37q52 21 62 93l-14 105-51 94-80 48-80-48-51-94Z" fill="url(#fur)" stroke="#9d8990" stroke-width="4"/>
+  <path d="M250 152 191 130l-54 51 18 99 32 36 25-95Zm0 0 59-22 54 51-18 99-32 36-25-95Z" fill="url(#face)"/>
+  <path d="m124 254 28 33-16 61 52 13-22 43 60 23 24 28-80-48-51-94Zm252 0-28 33 16 61-52 13 22 43-60 23-24 28 80-48 51-94Z" fill="#827680"/>
+  <path d="M250 158 219 221l31 151 31-151Z" fill="#aaa0a1" opacity=".7"/>
+  <path d="m157 256 42-15 43 18-36 23-40-6Zm186 0-42-15-43 18 36 23 40-6Z" fill="#191a23"/>
+  <path d="m163 258 40-10 29 11-29 12Zm174 0-40-10-29 11 29 12Z" fill="#efc985"/>
+  <path d="m177 292 73 52 73-52-26 74-47 62-47-62Z" fill="url(#muzzle)"/>
+  <path d="m202 350 48 42 48-42-17 45-31 33-31-33Z" fill="#b2a2a1"/>
+  <path d="m250 343-30-5 9-18 21-5 21 5 9 18Z" fill="#161720"/>
+  <path d="M250 343v35m0 0-23 10m23-10 23 10" fill="none" stroke="#413b43" stroke-width="5" stroke-linecap="round"/>
+  <path d="m156 190 69 21m119-21-69 21" stroke="#211f29" stroke-width="12" stroke-linecap="round"/>
+</svg>

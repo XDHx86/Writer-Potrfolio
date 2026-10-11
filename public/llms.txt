@@ -1,0 +1,40 @@
+# Muwafaq Sami — The Living Manuscript
+
+> Portfolio of Muwafaq Sami, a creative writer, screenwriter, and narrative designer developing character-led fiction, dramatic scripts, and story worlds.
+
+## About
+
+Muwafaq Sami has worked in long-form ghostwriting, theatre scriptwriting, EPUB editing, short-form creative production, and social media content. The portfolio presents original writing and narrative concepts alongside selected documents.
+
+## Core Specializations
+
+- Creative writing and ghostwriting
+- Screenwriting and dramatic development
+- Narrative design, worldbuilding, and lore documentation
+- Editorial work and digital publishing
+
+## Important Pages
+
+- [Homepage](https://portofolio-muwafaq.vercel.app/)
+- [Interactive resume](https://portofolio-muwafaq.vercel.app/resume)
+- [Resume PDF](https://portofolio-muwafaq.vercel.app/resume.pdf)
+- [Resume Markdown](https://portofolio-muwafaq.vercel.app/resume.md)
+- [Projects](https://portofolio-muwafaq.vercel.app/#projects)
+- [Contact](https://portofolio-muwafaq.vercel.app/#contact)
+
+## Selected Projects
+
+- [The Fate of Moramania](https://portofolio-muwafaq.vercel.app/?project=the-fate-of-moramania#projects): Epic fantasy worldbuilding supported by a reference glossary.
+- [Earth & Purgatory](https://portofolio-muwafaq.vercel.app/?project=earth-and-purgatory#projects): Dark supernatural fantasy concept about identity, power, and moral compromise.
+- [Wild Horses](https://portofolio-muwafaq.vercel.app/?project=wild-horses#projects): Coming-of-age literary concept using retrospective conversation and uncertain memory.
+- [What Remains of Us](https://portofolio-muwafaq.vercel.app/?project=what-remains-of-us#projects): Journal-format dark romance concept with restricted perspective.
+- [The Monster in the Woods](https://portofolio-muwafaq.vercel.app/?project=the-monster-in-the-woods#projects): Psychological horror and mystery premise built around limited perspective.
+
+## Contact
+
+- [Contact form](https://portofolio-muwafaq.vercel.app/#contact)
+- Public email: muwafaqsami.sp@gmail.com
+
+## Notes
+
+Project descriptions are spoiler-free summaries. Original concepts are not claimed as published or produced works. The PDF and Markdown resume are public documents supplied for this portfolio.

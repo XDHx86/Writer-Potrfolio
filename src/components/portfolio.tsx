@@ -13,6 +13,7 @@ import { archiveWorks, categories, filterProjects, projects, type ProjectCategor
 import { ProjectDialog } from "@/components/project-dialog";
 import { Wolf } from "@/components/wolf";
 import { recordEvent } from "@/lib/analytics";
+import { CopyButton } from "@/components/copy-button";
 
 const navigation = [
   { id: "about", label: "About" }, { id: "expertise", label: "Expertise" }, { id: "experience", label: "Experience" },
@@ -63,11 +64,12 @@ function Header() {
   return <header className="site-header">
     <div className="header-inner container">
       <a href="#top" className="brand" aria-label="Muwafaq Sami, back to top"><span className="brand-mark">M<span>.</span></span><span className="brand-name">MUWAFAQ<br/>SAMI</span></a>
-      <nav className="desktop-nav" aria-label="Main navigation">{navigation.map(({ id, label }) => <a key={id} href={`#${id}`} className={active === id ? "nav-active" : ""} aria-current={active === id ? "location" : undefined} onClick={() => recordEvent("navigation_click", { section: id })}>{label}</a>)}</nav>
+      <nav className="desktop-nav" aria-label="Main navigation">{navigation.map(({ id, label }) => <a key={id} href={`#${id}`} className={active === id ? "nav-active" : ""} aria-current={active === id ? "location" : undefined} onClick={() => recordEvent("navigation_click", { section: id })}>{label}</a>)}<a href="/resume">Resume</a></nav>
+      <button className="command-trigger" type="button" aria-label="Open command palette" onClick={() => window.dispatchEvent(new Event("open-command-palette"))}>Search <kbd>⌘ K</kbd></button>
       <a className="header-contact" href="#contact" onClick={() => recordEvent("contact_cta_click", { location: "header" })}>Let&apos;s talk <ArrowUpRight size={16}/></a>
       <button ref={menuButton} className="menu-toggle" type="button" aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} aria-controls="mobile-menu" onClick={() => setOpen(!open)}>{open ? <X size={24}/> : <Menu size={24}/>}</button>
     </div>
-    <nav ref={mobileNav} id="mobile-menu" className={`mobile-nav ${open ? "is-open" : ""}`} aria-label="Mobile navigation" inert={!open}>{navigation.map(({ id, label }) => <a key={id} href={`#${id}`} aria-current={active === id ? "location" : undefined} onClick={() => { setOpen(false); recordEvent("navigation_click", { section: id }); }}>{label}<ArrowUpRight size={17}/></a>)}</nav>
+    <nav ref={mobileNav} id="mobile-menu" className={`mobile-nav ${open ? "is-open" : ""}`} aria-label="Mobile navigation" inert={!open}>{navigation.map(({ id, label }) => <a key={id} href={`#${id}`} aria-current={active === id ? "location" : undefined} onClick={() => { setOpen(false); recordEvent("navigation_click", { section: id }); }}>{label}<ArrowUpRight size={17}/></a>)}<a href="/resume" onClick={() => setOpen(false)}>Resume<ArrowUpRight size={17}/></a><button type="button" onClick={() => { setOpen(false); menuButton.current?.focus(); window.dispatchEvent(new Event("open-command-palette")); }}>Search site <Search size={17}/></button></nav>
     <div className="scroll-progress" style={{ transform: `scaleX(${progress / 100})` }} />
   </header>;
 }
@@ -143,26 +145,32 @@ export function Work() {
     window.addEventListener("popstate", sync);
     return () => window.removeEventListener("popstate", sync);
   }, []);
+  useEffect(() => {
+    if (!activeSlug && opener.current) {
+      const timer = window.setTimeout(() => opener.current?.focus(), 0);
+      return () => window.clearTimeout(timer);
+    }
+  }, [activeSlug]);
   const openProject = (slug: string, element?: HTMLElement) => {
     if (element) opener.current = element;
     const item = projects.find((project) => project.slug === slug);
     recordEvent("project_open", { project: slug, category: item?.category ?? "Archive" });
     const url = new URL(window.location.href);
     url.searchParams.set("project", slug);
-    window.history.pushState({ project: slug }, "", url);
+    window.history.pushState({ portfolioProject: slug }, "", url);
     setActiveSlug(slug);
   };
   const closeProject = () => {
     if (activeSlug) recordEvent("project_close", { project: activeSlug });
     const url = new URL(window.location.href);
     url.searchParams.delete("project");
-    window.history.replaceState({}, "", url);
+    if (window.history.state?.portfolioProject) window.history.back();
+    else window.history.replaceState(window.history.state, "", url);
     setActiveSlug(null);
-    window.requestAnimationFrame(() => opener.current?.focus());
   };
   return <section id="projects" aria-labelledby="projects-heading" className="section section-projects"><div className="container">
     <Eyebrow number="04">THE STORY INDEX</Eyebrow><div className="section-heading-row"><Reveal><h2 id="projects-heading" className="section-title" aria-label="Stories in the making.">Stories in<br/><em>the making.</em></h2></Reveal><p className="section-intro">Five selected worlds, with the original documents close at hand. Open a title to read the work.</p></div>
-    <div className="filter-bar"><div className="filter-pills" aria-label="Filter projects by category">{categories.map((item) => <button type="button" className={`filter-pill ${category === item ? "selected" : ""}`} aria-pressed={category === item} onClick={() => { setCategory(item); recordEvent("project_filter_change", { category: item }); }} key={item}>{item}</button>)}</div><label className="search-field"><Search size={17}/><span className="sr-only">Search projects</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search projects" type="search"/></label></div>
+    <div className="filter-bar"><div className="filter-pills" aria-label="Filter projects by category">{categories.map((item) => <button type="button" className={`filter-pill ${category === item ? "selected" : ""}`} aria-pressed={category === item} onClick={() => { setCategory(item); recordEvent("project_filter_change", { category: item }); }} key={item}>{item}</button>)}</div><label className="search-field"><Search size={17}/><span className="sr-only">Search projects</span><input id="project-search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search projects" type="search"/></label></div>
     <div className="manuscript-list" aria-live="polite">{visible.length ? visible.map((project) => <button className={`manuscript-row manuscript-${project.accent}`} type="button" key={project.slug} onClick={(event) => openProject(project.slug, event.currentTarget)}><span className="manuscript-number">{project.number} / 05</span><span className="manuscript-main"><span className="manuscript-category">{project.category} · {project.genre}</span><strong>{project.title}</strong><span className="manuscript-premise">{project.premise}</span></span><span className="manuscript-ornament" aria-hidden="true">{project.title.charAt(0)}</span><ArrowUpRight className="manuscript-arrow" size={25}/></button>) : <p className="empty-state">No projects match your search. Clear a filter to see more work.</p>}</div>
     <div className="archive-heading"><span>THE ARCHIVE</span><p>More premises and writing samples from the supplied collection.</p></div><div className="archive-list">{archiveWorks.map((item, index) => <button type="button" className="archive-row" key={item.slug} onClick={(event) => openProject(item.slug, event.currentTarget)}><span>{String(index + 6).padStart(2, "0")}</span><strong>{item.title}</strong><small>{item.label}</small><ArrowUpRight size={17}/></button>)}</div>
     <p className="projects-note">Portfolio concepts and supplied documents. Publication or production status is not implied.</p>
@@ -189,7 +197,19 @@ function Contact() {
   };
   const onInvalid = (formErrors: typeof errors) => recordEvent("contact_form_validation_error", { count: Object.keys(formErrors).length });
   const onStart = (field: string) => { if (!started) { setStarted(true); recordEvent("contact_form_start", { field }); } };
-  return <section id="contact" className="section section-contact"><div className="container"><Eyebrow number="06">START A CONVERSATION</Eyebrow><div className="contact-grid"><Reveal><h2 className="section-title" aria-label="Have a story in mind?">Have a story<br/><em>in mind?</em></h2><p className="contact-intro">For writing, narrative development, scripts, or a conversation about a new idea, send a note.</p><a className="contact-email" href={`mailto:${profile.email}`} onClick={() => recordEvent("contact_cta_click", { location: "contact" })}><Mail size={19}/>{profile.email}<ArrowUpRight size={18}/></a><div className="contact-details"><span>{profile.location}</span><a href={`tel:${profile.phoneHref}`}>{profile.phoneDisplay}</a></div></Reveal><Reveal className="contact-form-wrap" delay={.08}><form onSubmit={handleSubmit(onSubmit, onInvalid)} noValidate onFocusCapture={(event) => { const field = (event.target as HTMLElement).getAttribute("name"); if (field && field !== "website") onStart(field); }}><div className="form-row"><label>Your name <input autoComplete="name" aria-invalid={!!errors.name} aria-describedby={errors.name ? "error-name" : undefined} {...register("name")}/>{errors.name && <span id="error-name" className="field-error">{errors.name.message}</span>}</label><label>Email address <input type="email" autoComplete="email" aria-invalid={!!errors.email} aria-describedby={errors.email ? "error-email" : undefined} {...register("email")}/>{errors.email && <span id="error-email" className="field-error">{errors.email.message}</span>}</label></div><label>Subject <input aria-invalid={!!errors.subject} aria-describedby={errors.subject ? "error-subject" : undefined} {...register("subject")}/>{errors.subject && <span id="error-subject" className="field-error">{errors.subject.message}</span>}</label><label>Message <textarea rows={5} aria-invalid={!!errors.message} aria-describedby={errors.message ? "error-message" : undefined} {...register("message")}/>{errors.message && <span id="error-message" className="field-error">{errors.message.message}</span>}</label><label className="honeypot" aria-hidden="true">Website <input tabIndex={-1} autoComplete="off" {...register("website")}/></label><div className="form-bottom"><p>Your message is used only to reply to your enquiry.</p><button className="button button-primary" type="submit" disabled={isSubmitting}>{isSubmitting ? "Sending…" : "Send message"} {isSubmitting ? null : <ArrowUpRight size={18}/>}</button></div>{status && <p className={`form-status status-${status.type}`} role="status">{status.type === "success" && <Check size={18}/>} {status.text}</p>}</form></Reveal></div></div></section>;
+  return <section id="contact" className="section section-contact"><div className="container"><Eyebrow number="06">START A CONVERSATION</Eyebrow><div className="contact-grid"><Reveal><h2 className="section-title" aria-label="Have a story in mind?">Have a story<br/><em>in mind?</em></h2><p className="contact-intro">For writing, narrative development, scripts, or a conversation about a new idea, send a note.</p><a className="contact-email" href={`mailto:${profile.email}`} onClick={() => recordEvent("contact_cta_click", { location: "contact" })}><Mail size={19}/>{profile.email}<ArrowUpRight size={18}/></a><div className="contact-details"><span>{profile.location}</span><a href={`tel:${profile.phoneHref}`}>{profile.phoneDisplay}</a></div><div className="copy-actions"><CopyButton value={profile.email} label="Copy email"/><CopyButton value="https://portofolio-muwafaq.vercel.app/" label="Copy portfolio URL"/><CopyButton value="https://portofolio-muwafaq.vercel.app/resume" label="Copy resume URL"/></div></Reveal><Reveal className="contact-form-wrap" delay={.08}><form onSubmit={handleSubmit(onSubmit, onInvalid)} noValidate onFocusCapture={(event) => { const field = (event.target as HTMLElement).getAttribute("name"); if (field && field !== "website") onStart(field); }}><div className="form-row"><label>Your name <input autoComplete="name" aria-invalid={!!errors.name} aria-describedby={errors.name ? "error-name" : undefined} {...register("name")}/>{errors.name && <span id="error-name" className="field-error">{errors.name.message}</span>}</label><label>Email address <input type="email" autoComplete="email" aria-invalid={!!errors.email} aria-describedby={errors.email ? "error-email" : undefined} {...register("email")}/>{errors.email && <span id="error-email" className="field-error">{errors.email.message}</span>}</label></div><label>Subject <input aria-invalid={!!errors.subject} aria-describedby={errors.subject ? "error-subject" : undefined} {...register("subject")}/>{errors.subject && <span id="error-subject" className="field-error">{errors.subject.message}</span>}</label><label>Message <textarea rows={5} aria-invalid={!!errors.message} aria-describedby={errors.message ? "error-message" : undefined} {...register("message")}/>{errors.message && <span id="error-message" className="field-error">{errors.message.message}</span>}</label><label className="honeypot" aria-hidden="true">Website <input tabIndex={-1} autoComplete="off" {...register("website")}/></label><div className="form-bottom"><p>Your message is used only to reply to your enquiry.</p><button className="button button-primary" type="submit" disabled={isSubmitting}>{isSubmitting ? "Sending…" : "Send message"} {isSubmitting ? null : <ArrowUpRight size={18}/>}</button></div>{status && <p className={`form-status status-${status.type}`} role="status">{status.type === "success" && <Check size={18}/>} {status.text}</p>}</form></Reveal></div></div></section>;
+}
+
+function BackToTop() {
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const update = () => setVisible(window.scrollY > 900);
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    return () => window.removeEventListener("scroll", update);
+  }, []);
+  if (!visible) return null;
+  return <a className="back-to-top" href="#top" aria-label="Back to top">↑</a>;
 }
 
 function Footer() {
@@ -197,5 +217,5 @@ function Footer() {
 }
 
 export function Portfolio() {
-  return <><Header/><main id="main"><Hero/><About/><Expertise/><Experience/><Work/><Education/><Contact/></main><Footer/></>;
+  return <><Header/><main id="main"><Hero/><About/><Expertise/><Experience/><Work/><Education/><Contact/></main><Footer/><BackToTop/></>;
 }

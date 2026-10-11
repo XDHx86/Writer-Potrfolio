@@ -12,5 +12,13 @@ export default function Home() {
     email: `mailto:${profile.email}`,
     url: siteUrl().toString(),
   };
-  return <><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(person).replace(/</g, "\\u003c") }}/><Portfolio /></>;
+  const website = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: `${profile.name} — The Living Manuscript`,
+    url: siteUrl().toString(),
+    description: profile.description,
+    author: { "@type": "Person", name: profile.name },
+  };
+  return <><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([person, website]).replace(/</g, "\\u003c") }}/><Portfolio /></>;
 }

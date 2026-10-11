@@ -23,6 +23,6 @@ export const education = [
 
 export const languages = [
   { name: "Arabic", level: "Native" },
-  { name: "English", level: "Bilingual · self-reported" },
-  { name: "German", level: "B1 · self-reported" },
+  { name: "English", level: "Bilingual" },
+  { name: "German", level: "B1" },
 ] as const;

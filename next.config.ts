@@ -10,6 +10,9 @@ const nextConfig: NextConfig = {
         { key: "X-Frame-Options", value: "DENY" },
         { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
       ],
+    }, {
+      source: "/resume.md",
+      headers: [{ key: "Content-Type", value: "text/markdown; charset=utf-8" }],
     }];
   },
 };
