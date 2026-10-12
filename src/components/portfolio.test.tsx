@@ -4,7 +4,7 @@ import { fireEvent, render, screen, within } from "@testing-library/react";
 import "@testing-library/jest-dom/vitest";
 import { Work } from "./portfolio";
 
-vi.mock("@vercel/analytics", () => ({ track: vi.fn() }));
+vi.mock("@plausible-analytics/tracker", () => ({ track: vi.fn() }));
 
 beforeAll(() => {
   Object.defineProperty(window, "matchMedia", { writable: true, value: vi.fn().mockImplementation((query: string) => ({ matches: false, media: query, addListener: vi.fn(), removeListener: vi.fn(), addEventListener: vi.fn(), removeEventListener: vi.fn(), dispatchEvent: vi.fn() })) });

@@ -1,6 +1,6 @@
 "use client";
 
-import { track } from "@vercel/analytics";
+import { track } from "@plausible-analytics/tracker";
 
 type Events = {
   navigation_click: { section: string };
@@ -22,7 +22,8 @@ type Events = {
 
 export function recordEvent<K extends keyof Events>(name: K, data: Events[K]): void {
   try {
-    track(name, data);
+    const props = Object.fromEntries(Object.entries(data).map(([key, value]) => [key, String(value)]));
+    track(name, { props });
   } catch {
     // Analytics must never interrupt an interaction.
   }

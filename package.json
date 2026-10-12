@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "latest",
-    "@vercel/analytics": "latest",
+    "@plausible-analytics/tracker": "^0.4.6",
     "@vercel/speed-insights": "latest",
     "lucide-react": "latest",
     "motion": "latest",

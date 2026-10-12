@@ -43,13 +43,15 @@ Project buttons open a native modal dialog. It has Escape and backdrop close, fo
 
 The form POSTs JSON directly to `https://formspree.io/f/mdeadwwe` with `Accept: application/json`. It validates fields with Zod and React Hook Form, includes a Formspree honeypot, blocks repeated submission while pending, preserves inputs on failure, and shows success only after an HTTP success response. Confirm in the Formspree dashboard that this form ID is active and sends to the intended inbox. No live message is sent by the automated tests; responses are mocked.
 
-Vercel Web Analytics and Speed Insights load once in the root layout. Custom events are typed in `src/lib/analytics.ts` for navigation, project and PDF interactions, filters, experience expansion, and contact flow. Events contain only interaction metadata; no visitor or message content is sent. Vercel custom events may require a supported paid plan. Enable Speed Insights in the Vercel project dashboard to collect production traffic data.
+Plausible Analytics initializes once in the root layout and automatically records pageviews, including client-side navigation. Custom events are typed in `src/lib/analytics.ts` for navigation, project and PDF interactions, filters, experience expansion, and contact flow. Events contain only interaction metadata; no visitor or message content is sent. Vercel Speed Insights still measures performance; enable it in the Vercel project dashboard to collect production traffic data.
+
+Add the deployed site's hostname to your Plausible account. The tracker uses `NEXT_PUBLIC_PLAUSIBLE_DOMAIN` if set, otherwise the hostname from `NEXT_PUBLIC_SITE_URL`; it must match the domain registered in Plausible. Plausible ignores localhost visits by default. After deployment, use Plausible's site installation checker or look for a `POST` to `https://plausible.io/api/event` in the browser Network tab. To see custom events as conversions, add matching Custom event goals in Plausible's Goals settings. Start with `contact_form_submit_success`, `project_open`, and `project_pdf_download`; the other exact event names are in `src/lib/analytics.ts`.
 
 ## Deploy to Vercel
 
 1. Push this folder as a repository or set `Resumes/mufaq/Portofolio` as the Vercel project root.
 2. Import it as a Next.js project. The build command is `npm run build`.
-3. Set `NEXT_PUBLIC_SITE_URL=https://portofolio-muwafaq.vercel.app` if a URL override is needed. This is already the code fallback for metadata, sitemap, robots, and structured data.
+3. Set `NEXT_PUBLIC_SITE_URL=https://portofolio-muwafaq.vercel.app` if a URL override is needed. This is already the code fallback for metadata, sitemap, robots, structured data, and the Plausible domain. Set `NEXT_PUBLIC_PLAUSIBLE_DOMAIN` only if the Plausible site uses a different hostname.
 4. Deploy, then verify `/`, `/resume`, `/resume.pdf`, `/resume.md`, `/llms.txt`, `/favicon.ico`, `/sitemap.xml`, `/robots.txt`, the project dialog, and one real Formspree submission you initiate.
 
 No server-side email key or Resend setup is required. The project is prepared for the requested domain but has not been deployed by this workspace task.

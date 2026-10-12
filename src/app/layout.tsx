@@ -1,9 +1,9 @@
 import type { Metadata, Viewport } from "next";
-import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { siteUrl } from "@/lib/site-url";
 import { profile } from "@/data/profile";
 import { CommandPalette } from "@/components/command-palette";
+import { PlausibleAnalytics } from "@/components/plausible-analytics";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -19,5 +19,6 @@ export const metadata: Metadata = {
 export const viewport: Viewport = { themeColor: "#100d11", width: "device-width", initialScale: 1 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en" data-scroll-behavior="smooth"><body><a className="skip-link" href="#main">Skip to content</a>{children}<CommandPalette/><Analytics /><SpeedInsights /></body></html>;
+  const plausibleDomain = process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN || siteUrl().hostname;
+  return <html lang="en" data-scroll-behavior="smooth"><body><a className="skip-link" href="#main">Skip to content</a>{children}<CommandPalette/><PlausibleAnalytics domain={plausibleDomain}/><SpeedInsights /></body></html>;
 }
